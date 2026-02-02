@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Netflix Reviews</title>
+  <style>
+    body {
+      background:#141414;
+      color:white;
+      font-family: Arial;
+      margin:0;
+    }
+    header {
+      background:#e50914;
+      padding:15px;
+      text-align:center;
+      font-size:22px;
+      font-weight:bold;
+    }
+    .container {
+      padding:20px;
+      max-width:600px;
+      margin:auto;
+    }
+    input, textarea, button {
+      width:100%;
+      padding:10px;
+      margin:8px 0;
+      border-radius:5px;
+      border:none;
+    }
+    button {
+      background:#e50914;
+      color:white;
+      cursor:pointer;
+    }
+    .card {
+      background:#1f1f1f;
+      padding:15px;
+      margin-top:10px;
+      border-radius:6px;
+    }
+  </style>
+</head>
+<body>
+
+<header>🎬 Netflix Reviews</header>
+
+<div class="container">
+  <input id="movie" placeholder="Movie / Series Name">
+  <textarea id="review" placeholder="Write your review"></textarea>
+  <button onclick="addReview()">Submit Review</button>
+
+  <h3>Reviews</h3>
+  <div id="reviews"></div>
+</div>
+
+<script>
+  const API = "http://localhost:5000/api/reviews";
+
+  window.onload = loadReviews;
+
+  async function loadReviews() {
+    const res = await fetch(API);
+    const data = await res.json();
+    const box = document.getElementById("reviews");
+    box.innerHTML = "";
+
+    data.forEach(r => {
+      const div = document.createElement("div");
+      div.className = "card";
+      div.innerHTML = `
+        <strong>${r.movieName}</strong>
+        <p>⭐ ${r.rating}/5</p>
+        <p>${r.comment}</p>
+      `;
+      box.appendChild(div);
+    });
+  }
+
+  async function addReview() {
+    const movie = document.getElementById("movie").value;
+    const review = document.getElementById("review").value;
+
+    if (!movie || !review) {
+      alert("Fill all fields");
+      return;
+    }
+
+    await fetch(API, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        movieName: movie,
+        rating: 5,
+        comment: review
+      })
+    });
+
+    document.getElementById("movie").value = "";
+    document.getElementById("review").value = "";
+
+    loadReviews();
+  }
+</script>
+
+</body>
+</html>

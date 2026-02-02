@@ -1,3 +1,6 @@
+const dns = require('dns');
+dns.setServers(['8.8.8.8', '8.8.4.4']); // Force public DNS to resolve Atlas SRV records
+
 const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
@@ -5,13 +8,10 @@ const connectDB = require("./config/db");
 
 dotenv.config();
 
-// ⬇️ CONNECT DB FIRST
+// CONNECT DB FIRST
 connectDB();
 
 const app = express();
-app.use(cors());
-app.use(express.json());
-
 app.get("/", (req, res) => {
   res.send("Netflix Reviews Backend Running");
 });

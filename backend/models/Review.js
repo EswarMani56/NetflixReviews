@@ -1,10 +1,13 @@
 const mongoose = require("mongoose");
 
-const reviewSchema = new mongoose.Schema({
-  movieName: { type: String, required: true },
-  rating: { type: Number, required: true },
-  comment: { type: String, required: true },
-  createdAt: { type: Date, default: Date.now }
-});
+const reviewSchema = new mongoose.Schema(
+  {
+    imdbID: { type: String, required: true },
+    movieName: String,
+    rating: Number,
+    comment: String,
+  },
+  { timestamps: true }
+);
 
 module.exports = mongoose.model("Review", reviewSchema);

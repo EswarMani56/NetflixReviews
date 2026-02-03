@@ -14,8 +14,12 @@ router.post("/", async (req, res) => {
 });
 
 // GET all reviews
-router.get("/", async (req, res) => {
-  const reviews = await Review.find().sort({ createdAt: -1 });
+// GET reviews by imdbID
+router.get("/:imdbID", async (req, res) => {
+  const reviews = await Review.find({
+    imdbID: req.params.imdbID,
+  }).sort({ createdAt: -1 });
+
   res.json(reviews);
 });
 
